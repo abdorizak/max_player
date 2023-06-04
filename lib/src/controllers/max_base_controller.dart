@@ -1,7 +1,4 @@
-// ignore_for_file: non_constant_identifier_names, no_leading_underscores_for_local_identifiers
-
 part of 'max_getx_video_controller.dart';
-// ignore_for_file: prefer_final_fields
 
 class _MaxBaseController extends GetxController {
   ///main video controller
@@ -17,7 +14,7 @@ class _MaxBaseController extends GetxController {
   bool _isWebAutoPlayDone = false;
 
   ///
-  MaxVideoState _MaxVideoState = MaxVideoState.loading;
+  MaxVideoState _maxVideoState = MaxVideoState.loading;
 
   ///
   bool isWebPopupOverlayOpen = false;
@@ -71,12 +68,12 @@ class _MaxBaseController extends GetxController {
     }
   }
 
-  ///updates state with id `_MaxVideoState`
-  void MaxVideoStateChanger(MaxVideoState? _val, {bool updateUi = true}) {
-    if (_MaxVideoState != (_val ?? _MaxVideoState)) {
-      _MaxVideoState = _val ?? _MaxVideoState;
+  ///updates state with id `_maxVideoState`
+  void maxVideoStateChanger(MaxVideoState? _val, {bool updateUi = true}) {
+    if (_maxVideoState != (_val ?? _maxVideoState)) {
+      _maxVideoState = _val ?? _maxVideoState;
       if (updateUi) {
-        update(['MaxVideoState']);
+        update(['maxVideoState']);
         update(['update-all']);
       }
     }
