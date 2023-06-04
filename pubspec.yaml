@@ -1,7 +1,9 @@
 name: max_player
-description: A new Flutter package project.
+description: Max Player is a simple package to that helps you to play videos from your local, network and from the internet weather youtube, vimeo, etc.
 version: 1.1.1
-homepage: https://github.com/abdorizak/max_player
+homepage: https://abdorizak.dev
+repository: https://github.com/abdorizak/max_player
+issue_tracker: https://github.com/abdorizak/max_player/issues
 
 environment:
   sdk: ">=3.0.1 <4.0.0"
