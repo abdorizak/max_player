@@ -19,14 +19,14 @@ class _MaxVideoQualityController extends _MaxVideoController {
     String? hash,
   }) async {
     try {
-      MaxVideoStateChanger(MaxVideoState.loading);
-      final vimeoVideoUrls = await VideoApis.getVimeoVideoQualityUrls(
+      maxVideoStateChanger(MaxVideoState.loading);
+      final _vimeoVideoUrls = await VideoApis.getVimeoVideoQualityUrls(
         videoId,
         hash,
       );
 
       ///
-      vimeoOrVideoUrls = vimeoVideoUrls ?? [];
+      vimeoOrVideoUrls = _vimeoVideoUrls ?? [];
     } catch (e) {
       rethrow;
     }
@@ -37,12 +37,12 @@ class _MaxVideoQualityController extends _MaxVideoController {
     Map<String, String> httpHeader,
   ) async {
     try {
-      MaxVideoStateChanger(MaxVideoState.loading);
-      final vimeoVideoUrls =
+      maxVideoStateChanger(MaxVideoState.loading);
+      final _vimeoVideoUrls =
           await VideoApis.getVimeoPrivateVideoQualityUrls(videoId, httpHeader);
 
       ///
-      vimeoOrVideoUrls = vimeoVideoUrls ?? [];
+      vimeoOrVideoUrls = _vimeoVideoUrls ?? [];
     } catch (e) {
       rethrow;
     }
@@ -51,21 +51,21 @@ class _MaxVideoQualityController extends _MaxVideoController {
   void sortQualityVideoUrls(
     List<VideoQalityUrls>? urls,
   ) {
-    final videoUrls = urls;
+    final _urls = urls;
 
     ///has issues with 240p
-    videoUrls?.removeWhere((element) => element.quality == 240);
+    _urls?.removeWhere((element) => element.quality == 240);
 
     ///has issues with 144p in web
     if (kIsWeb) {
-      videoUrls?.removeWhere((element) => element.quality == 144);
+      _urls?.removeWhere((element) => element.quality == 144);
     }
 
     ///sort
-    videoUrls?.sort((a, b) => a.quality.compareTo(b.quality));
+    _urls?.sort((a, b) => a.quality.compareTo(b.quality));
 
     ///
-    vimeoOrVideoUrls = videoUrls ?? [];
+    vimeoOrVideoUrls = _urls ?? [];
   }
 
   ///get vimeo quality `ex: 1080p` url
@@ -124,8 +124,8 @@ class _MaxVideoQualityController extends _MaxVideoController {
       maxLog(_videoQualityUrl);
       vimeoPlayingVideoQuality = quality;
       _videoCtr?.removeListener(videoListner);
-      MaxVideoStateChanger(MaxVideoState.paused);
-      MaxVideoStateChanger(MaxVideoState.loading);
+      maxVideoStateChanger(MaxVideoState.paused);
+      maxVideoStateChanger(MaxVideoState.loading);
       playingVideoUrl = _videoQualityUrl;
       _videoCtr = VideoPlayerController.network(_videoQualityUrl);
       await _videoCtr?.initialize();
@@ -133,7 +133,7 @@ class _MaxVideoQualityController extends _MaxVideoController {
       _videoCtr?.addListener(videoListner);
       await _videoCtr?.seekTo(_videoPosition);
       setVideoPlayBack(_currentPaybackSpeed);
-      MaxVideoStateChanger(MaxVideoState.playing);
+      maxVideoStateChanger(MaxVideoState.playing);
       onVimeoVideoQualityChanged?.call();
       update();
       update(['update-all']);

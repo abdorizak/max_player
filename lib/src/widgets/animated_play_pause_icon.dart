@@ -17,16 +17,16 @@ class _AnimatedPlayPauseIcon extends StatefulWidget {
 class _AnimatedPlayPauseIconState extends State<_AnimatedPlayPauseIcon>
     with SingleTickerProviderStateMixin {
   late final AnimationController _payCtr;
-  late MaxGetXVideoController maxCtr;
+  late MaxGetXVideoController _maxCtr;
   @override
   void initState() {
-    maxCtr = Get.find<MaxGetXVideoController>(tag: widget.tag);
+    _maxCtr = Get.find<MaxGetXVideoController>(tag: widget.tag);
     _payCtr = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 450),
     );
-    maxCtr.addListenerId('MaxVideoState', playPauseListner);
-    if (maxCtr.isvideoPlaying) {
+    _maxCtr.addListenerId('maxVideoState', playPauseListner);
+    if (_maxCtr.isvideoPlaying) {
       if (mounted) _payCtr.forward();
     }
     super.initState();
@@ -34,10 +34,10 @@ class _AnimatedPlayPauseIconState extends State<_AnimatedPlayPauseIcon>
 
   void playPauseListner() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      if (maxCtr.maxVideoState == MaxVideoState.playing) {
+      if (_maxCtr.maxVideoState == MaxVideoState.playing) {
         if (mounted) _payCtr.forward();
       }
-      if (maxCtr.maxVideoState == MaxVideoState.paused) {
+      if (_maxCtr.maxVideoState == MaxVideoState.paused) {
         if (mounted) _payCtr.reverse();
       }
     });
@@ -55,35 +55,35 @@ class _AnimatedPlayPauseIconState extends State<_AnimatedPlayPauseIcon>
     return GetBuilder<MaxGetXVideoController>(
       tag: widget.tag,
       id: 'overlay',
-      builder: (maxCtr) {
+      builder: (_maxCtr) {
         return GetBuilder<MaxGetXVideoController>(
           tag: widget.tag,
-          id: 'MaxVideoState',
-          builder: (f) => MaterialIconButton(
-            toolTipMesg: f.isvideoPlaying
-                ? maxCtr.maxPlayerLabels.pause ??
+          id: 'maxVideoState',
+          builder: (_f) => MaterialIconButton(
+            toolTipMesg: _f.isvideoPlaying
+                ? _maxCtr.maxPlayerLabels.pause ??
                     'Pause${kIsWeb ? ' (space)' : ''}'
-                : maxCtr.maxPlayerLabels.play ??
+                : _maxCtr.maxPlayerLabels.play ??
                     'Play${kIsWeb ? ' (space)' : ''}',
             onPressed:
-                maxCtr.isOverlayVisible ? maxCtr.togglePlayPauseVideo : null,
-            child: onStateChange(maxCtr),
+                _maxCtr.isOverlayVisible ? _maxCtr.togglePlayPauseVideo : null,
+            child: onStateChange(_maxCtr),
           ),
         );
       },
     );
   }
 
-  Widget onStateChange(MaxGetXVideoController maxCtr) {
-    if (kIsWeb) return _playPause(maxCtr);
-    if (maxCtr.maxVideoState == MaxVideoState.loading) {
+  Widget onStateChange(MaxGetXVideoController _maxCtr) {
+    if (kIsWeb) return _playPause(_maxCtr);
+    if (_maxCtr.maxVideoState == MaxVideoState.loading) {
       return const SizedBox();
     } else {
-      return _playPause(maxCtr);
+      return _playPause(_maxCtr);
     }
   }
 
-  Widget _playPause(MaxGetXVideoController maxCtr) {
+  Widget _playPause(MaxGetXVideoController _maxCtr) {
     return AnimatedIcon(
       icon: AnimatedIcons.play_pause,
       progress: _payCtr,

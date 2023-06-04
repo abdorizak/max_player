@@ -14,17 +14,17 @@ class _MaxCoreVideoPlayer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final podCtr = Get.find<MaxGetXVideoController>(tag: tag);
+    final _maxCtr = Get.find<MaxGetXVideoController>(tag: tag);
     return Builder(
-      builder: (ctrx) {
+      builder: (_ctrx) {
         return RawKeyboardListener(
           autofocus: true,
           focusNode:
-              (podCtr.isFullScreen ? FocusNode() : podCtr.keyboardFocusWeb) ??
+              (_maxCtr.isFullScreen ? FocusNode() : _maxCtr.keyboardFocusWeb) ??
                   FocusNode(),
-          onKey: (value) => podCtr.onKeyBoardEvents(
+          onKey: (value) => _maxCtr.onKeyBoardEvents(
             event: value,
-            appContext: ctrx,
+            appContext: _ctrx,
             tag: tag,
           ),
           child: Stack(
@@ -42,13 +42,13 @@ class _MaxCoreVideoPlayer extends StatelessWidget {
                 builder: (_) => GetBuilder<MaxGetXVideoController>(
                   tag: tag,
                   id: 'video-progress',
-                  builder: (podCtr) {
-                    if (podCtr.videoThumbnail == null) {
+                  builder: (_maxCtr) {
+                    if (_maxCtr.videoThumbnail == null) {
                       return const SizedBox();
                     }
 
-                    if (podCtr.maxVideoState == MaxVideoState.paused &&
-                        podCtr.videoPosition == Duration.zero) {
+                    if (_maxCtr.maxVideoState == MaxVideoState.paused &&
+                        _maxCtr.videoPosition == Duration.zero) {
                       return SizedBox.expand(
                         child: TweenAnimationBuilder<double>(
                           builder: (context, value, child) => Opacity(
@@ -59,7 +59,7 @@ class _MaxCoreVideoPlayer extends StatelessWidget {
                           duration: const Duration(milliseconds: 400),
                           child: DecoratedBox(
                             decoration: BoxDecoration(
-                              image: podCtr.videoThumbnail,
+                              image: _maxCtr.videoThumbnail,
                             ),
                           ),
                         ),
@@ -74,8 +74,8 @@ class _MaxCoreVideoPlayer extends StatelessWidget {
                 child: GetBuilder<MaxGetXVideoController>(
                   tag: tag,
                   id: 'maxVideoState',
-                  builder: (podCtr) {
-                    final loadingWidget = podCtr.onLoading?.call(context) ??
+                  builder: (_maxCtr) {
+                    final loadingWidget = _maxCtr.onLoading?.call(context) ??
                         const Center(
                           child: CircularProgressIndicator(
                             backgroundColor: Colors.transparent,
@@ -85,7 +85,7 @@ class _MaxCoreVideoPlayer extends StatelessWidget {
                         );
 
                     if (kIsWeb) {
-                      switch (podCtr.maxVideoState) {
+                      switch (_maxCtr.maxVideoState) {
                         case MaxVideoState.loading:
                           return loadingWidget;
                         case MaxVideoState.paused:
@@ -116,7 +116,7 @@ class _MaxCoreVideoPlayer extends StatelessWidget {
                           return const SizedBox();
                       }
                     } else {
-                      if (podCtr.maxVideoState == MaxVideoState.loading) {
+                      if (_maxCtr.maxVideoState == MaxVideoState.loading) {
                         return loadingWidget;
                       }
                       return const SizedBox();
@@ -128,13 +128,13 @@ class _MaxCoreVideoPlayer extends StatelessWidget {
                 GetBuilder<MaxGetXVideoController>(
                   tag: tag,
                   id: 'full-screen',
-                  builder: (podCtr) => podCtr.isFullScreen
+                  builder: (_maxCtr) => _maxCtr.isFullScreen
                       ? const SizedBox()
                       : GetBuilder<MaxGetXVideoController>(
                           tag: tag,
                           id: 'overlay',
-                          builder: (podCtr) => podCtr.isOverlayVisible ||
-                                  !podCtr.alwaysShowProgressBar
+                          builder: (_maxCtr) => _maxCtr.isOverlayVisible ||
+                                  !_maxCtr.alwaysShowProgressBar
                               ? const SizedBox()
                               : Align(
                                   alignment: Alignment.bottomCenter,
@@ -142,7 +142,7 @@ class _MaxCoreVideoPlayer extends StatelessWidget {
                                     tag: tag,
                                     alignment: Alignment.bottomCenter,
                                     maxProgressBarConfig:
-                                        podCtr.maxProgressBarConfig,
+                                        _maxCtr.maxProgressBarConfig,
                                   ),
                                 ),
                         ),

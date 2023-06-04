@@ -1,10 +1,8 @@
-// ignore_for_file: no_leading_underscores_for_library_prefixes, no_leading_underscores_for_local_identifiers
-
 import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:universal_html/html.dart' as _html;
+import 'package:universal_html/html.dart' as html;
 import 'package:wakelock/wakelock.dart';
 
 import '../../max_player.dart';
@@ -51,12 +49,12 @@ class MaxPlayerController {
       try {
         if (!_isCtrInitialised) {
           await _ctr.videoInit();
-          maxLog('$getTag max player Initialized');
+          maxLog('$getTag Max player Initialized');
         } else {
-          maxLog('$getTag max Player Controller Already Initialized');
+          maxLog('$getTag Max Player Controller Already Initialized');
         }
       } catch (error) {
-        maxLog('$getTag max Player Controller failed to initialize');
+        maxLog('$getTag Max Player Controller failed to initialize');
         _initializationError = error;
       }
     });
@@ -123,10 +121,10 @@ class MaxPlayerController {
   //! video play/pause
 
   /// plays the video
-  void play() => _ctr.MaxVideoStateChanger(MaxVideoState.playing);
+  void play() => _ctr.maxVideoStateChanger(MaxVideoState.playing);
 
   /// pauses the video
-  void pause() => _ctr.MaxVideoStateChanger(MaxVideoState.paused);
+  void pause() => _ctr.maxVideoStateChanger(MaxVideoState.paused);
 
   /// toogle play and pause
   void togglePlayPause() {
@@ -167,13 +165,13 @@ class MaxPlayerController {
     _isCtrInitialised = false;
     _ctr.videoCtr?.removeListener(_ctr.videoListner);
     _ctr.videoCtr?.dispose();
-    _ctr.removeListenerId('MaxVideoState', _ctr.maxStateListner);
+    _ctr.removeListenerId('maxVideoState', _ctr.maxStateListner);
     if (maxPlayerConfig.wakelockEnabled) Wakelock.disable();
     Get.delete<MaxGetXVideoController>(
       force: true,
       tag: getTag,
     );
-    maxLog('$getTag max player Disposed');
+    maxLog('$getTag Max player Disposed');
   }
 
   /// used to change the video
@@ -230,7 +228,7 @@ class MaxPlayerController {
   /// If onToggleFullScreen is set, you must handle the device
   /// orientation by yourself.
   void enableFullScreen() {
-    _html.document.documentElement?.requestFullscreen();
+    html.document.documentElement?.requestFullscreen();
     _ctr.enableFullScreen(getTag);
   }
 
@@ -239,7 +237,7 @@ class MaxPlayerController {
   /// If onToggleFullScreen is set, you must handle the device
   /// orientation by yourself.
   void disableFullScreen(BuildContext context) {
-    _html.document.exitFullscreen();
+    html.document.exitFullscreen();
 
     if (!_ctr.isWebPopupOverlayOpen) {
       _ctr.disableFullScreen(context, getTag);

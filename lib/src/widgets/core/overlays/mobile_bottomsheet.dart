@@ -12,14 +12,14 @@ class _MobileBottomSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder<MaxGetXVideoController>(
       tag: tag,
-      builder: (maxCtr) => Column(
+      builder: (_maxCtr) => Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          if (maxCtr.vimeoOrVideoUrls.isNotEmpty)
+          if (_maxCtr.vimeoOrVideoUrls.isNotEmpty)
             _bottomSheetTiles(
-              title: maxCtr.maxPlayerLabels.quality,
+              title: _maxCtr.maxPlayerLabels.quality,
               icon: Icons.video_settings_rounded,
-              subText: '${maxCtr.vimeoPlayingVideoQuality}p',
+              subText: '${_maxCtr.vimeoPlayingVideoQuality}p',
               onTap: () {
                 Navigator.of(context).pop();
                 Timer(const Duration(milliseconds: 100), () {
@@ -39,20 +39,20 @@ class _MobileBottomSheet extends StatelessWidget {
               },
             ),
           _bottomSheetTiles(
-            title: maxCtr.maxPlayerLabels.loopVideo,
+            title: _maxCtr.maxPlayerLabels.loopVideo,
             icon: Icons.loop_rounded,
-            subText: maxCtr.isLooping
-                ? maxCtr.maxPlayerLabels.optionEnabled
-                : maxCtr.maxPlayerLabels.optionDisabled,
+            subText: _maxCtr.isLooping
+                ? _maxCtr.maxPlayerLabels.optionEnabled
+                : _maxCtr.maxPlayerLabels.optionDisabled,
             onTap: () {
               Navigator.of(context).pop();
-              maxCtr.toggleLooping();
+              _maxCtr.toggleLooping();
             },
           ),
           _bottomSheetTiles(
-            title: maxCtr.maxPlayerLabels.playbackSpeed,
+            title: _maxCtr.maxPlayerLabels.playbackSpeed,
             icon: Icons.slow_motion_video_rounded,
-            subText: maxCtr.currentPaybackSpeed,
+            subText: _maxCtr.currentPaybackSpeed,
             onTap: () {
               Navigator.of(context).pop();
               Timer(const Duration(milliseconds: 100), () {
@@ -128,18 +128,18 @@ class _VideoQualitySelectorMob extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final maxCtr = Get.find<MaxGetXVideoController>(tag: tag);
+    final _maxCtr = Get.find<MaxGetXVideoController>(tag: tag);
     return SingleChildScrollView(
       child: Column(
         mainAxisSize: MainAxisSize.min,
-        children: maxCtr.vimeoOrVideoUrls
+        children: _maxCtr.vimeoOrVideoUrls
             .map(
               (e) => ListTile(
                 title: Text('${e.quality}p'),
                 onTap: () {
                   onTap != null ? onTap!() : Navigator.of(context).pop();
 
-                  maxCtr.changeVideoQuality(e.quality);
+                  _maxCtr.changeVideoQuality(e.quality);
                 },
               ),
             )
@@ -161,17 +161,17 @@ class _VideoPlaybackSelectorMob extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final maxCtr = Get.find<MaxGetXVideoController>(tag: tag);
+    final _maxCtr = Get.find<MaxGetXVideoController>(tag: tag);
     return SingleChildScrollView(
       child: Column(
         mainAxisSize: MainAxisSize.min,
-        children: maxCtr.videoPlaybackSpeeds
+        children: _maxCtr.videoPlaybackSpeeds
             .map(
               (e) => ListTile(
                 title: Text(e),
                 onTap: () {
                   onTap != null ? onTap!() : Navigator.of(context).pop();
-                  maxCtr.setVideoPlayBack(e);
+                  _maxCtr.setVideoPlayBack(e);
                 },
               ),
             )
@@ -197,7 +197,7 @@ class _MobileOverlayBottomControlles extends StatelessWidget {
     return GetBuilder<MaxGetXVideoController>(
       tag: tag,
       id: 'full-screen',
-      builder: (maxCtr) => Column(
+      builder: (_maxCtr) => Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Row(
@@ -206,11 +206,11 @@ class _MobileOverlayBottomControlles extends StatelessWidget {
               GetBuilder<MaxGetXVideoController>(
                 tag: tag,
                 id: 'video-progress',
-                builder: (maxCtr) {
+                builder: (_maxCtr) {
                   return Row(
                     children: [
                       Text(
-                        maxCtr.calculateVideoDuration(maxCtr.videoPosition),
+                        _maxCtr.calculateVideoDuration(_maxCtr.videoPosition),
                         style: const TextStyle(color: itemColor),
                       ),
                       const Text(
@@ -218,7 +218,7 @@ class _MobileOverlayBottomControlles extends StatelessWidget {
                         style: durationTextStyle,
                       ),
                       Text(
-                        maxCtr.calculateVideoDuration(maxCtr.videoDuration),
+                        _maxCtr.calculateVideoDuration(_maxCtr.videoDuration),
                         style: durationTextStyle,
                       ),
                     ],
@@ -227,25 +227,25 @@ class _MobileOverlayBottomControlles extends StatelessWidget {
               ),
               const Spacer(),
               MaterialIconButton(
-                toolTipMesg: maxCtr.isFullScreen
-                    ? maxCtr.maxPlayerLabels.exitFullScreen ??
+                toolTipMesg: _maxCtr.isFullScreen
+                    ? _maxCtr.maxPlayerLabels.exitFullScreen ??
                         'Exit full screen${kIsWeb ? ' (f)' : ''}'
-                    : maxCtr.maxPlayerLabels.fullscreen ??
+                    : _maxCtr.maxPlayerLabels.fullscreen ??
                         'Fullscreen${kIsWeb ? ' (f)' : ''}',
                 color: itemColor,
                 onPressed: () {
-                  if (maxCtr.isOverlayVisible) {
-                    if (maxCtr.isFullScreen) {
-                      maxCtr.disableFullScreen(context, tag);
+                  if (_maxCtr.isOverlayVisible) {
+                    if (_maxCtr.isFullScreen) {
+                      _maxCtr.disableFullScreen(context, tag);
                     } else {
-                      maxCtr.enableFullScreen(tag);
+                      _maxCtr.enableFullScreen(tag);
                     }
                   } else {
-                    maxCtr.toggleVideoOverlay();
+                    _maxCtr.toggleVideoOverlay();
                   }
                 },
                 child: Icon(
-                  maxCtr.isFullScreen
+                  _maxCtr.isFullScreen
                       ? Icons.fullscreen_exit
                       : Icons.fullscreen,
                 ),
@@ -255,16 +255,16 @@ class _MobileOverlayBottomControlles extends StatelessWidget {
           GetBuilder<MaxGetXVideoController>(
             tag: tag,
             id: 'overlay',
-            builder: (maxCtr) {
-              if (maxCtr.isFullScreen) {
+            builder: (_maxCtr) {
+              if (_maxCtr.isFullScreen) {
                 return Padding(
                   padding: const EdgeInsets.fromLTRB(12, 0, 12, 20),
                   child: Visibility(
-                    visible: maxCtr.isOverlayVisible,
+                    visible: _maxCtr.isOverlayVisible,
                     child: MaxProgressBar(
                       tag: tag,
                       alignment: Alignment.topCenter,
-                      maxProgressBarConfig: maxCtr.maxProgressBarConfig,
+                      maxProgressBarConfig: _maxCtr.maxProgressBarConfig,
                     ),
                   ),
                 );
@@ -272,7 +272,7 @@ class _MobileOverlayBottomControlles extends StatelessWidget {
               return MaxProgressBar(
                 tag: tag,
                 alignment: Alignment.bottomCenter,
-                maxProgressBarConfig: maxCtr.maxProgressBarConfig,
+                maxProgressBarConfig: _maxCtr.maxProgressBarConfig,
               );
             },
           ),

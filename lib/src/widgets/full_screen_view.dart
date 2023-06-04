@@ -1,5 +1,3 @@
-// ignore_for_file: use_build_context_synchronously, no_leading_underscores_for_local_identifiers
-
 part of 'package:max_player/src/max_player.dart';
 
 class FullScreenView extends StatefulWidget {
@@ -15,26 +13,26 @@ class FullScreenView extends StatefulWidget {
 
 class _FullScreenViewState extends State<FullScreenView>
     with TickerProviderStateMixin {
-  late MaxGetXVideoController maxCtr;
+  late MaxGetXVideoController _maxCtr;
   @override
   void initState() {
-    maxCtr = Get.find<MaxGetXVideoController>(tag: widget.tag);
-    maxCtr.fullScreenContext = context;
-    maxCtr.keyboardFocusWeb?.removeListener(maxCtr.keyboadListner);
+    _maxCtr = Get.find<MaxGetXVideoController>(tag: widget.tag);
+    _maxCtr.fullScreenContext = context;
+    _maxCtr.keyboardFocusWeb?.removeListener(_maxCtr.keyboadListner);
 
     super.initState();
   }
 
   @override
   void dispose() {
-    maxCtr.keyboardFocusWeb?.requestFocus();
-    maxCtr.keyboardFocusWeb?.addListener(maxCtr.keyboadListner);
+    _maxCtr.keyboardFocusWeb?.requestFocus();
+    _maxCtr.keyboardFocusWeb?.addListener(_maxCtr.keyboadListner);
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final loadingWidget = maxCtr.onLoading?.call(context) ??
+    final loadingWidget = _maxCtr.onLoading?.call(context) ??
         const CircularProgressIndicator(
           backgroundColor: Colors.black87,
           color: Colors.white,
@@ -44,34 +42,34 @@ class _FullScreenViewState extends State<FullScreenView>
     return WillPopScope(
       onWillPop: () async {
         if (kIsWeb) {
-          await maxCtr.disableFullScreen(
+          await _maxCtr.disableFullScreen(
             context,
             widget.tag,
             enablePop: false,
           );
         }
-        if (!kIsWeb) await maxCtr.disableFullScreen(context, widget.tag);
+        if (!kIsWeb) await _maxCtr.disableFullScreen(context, widget.tag);
         return true;
       },
       child: Scaffold(
         backgroundColor: Colors.black,
         body: GetBuilder<MaxGetXVideoController>(
           tag: widget.tag,
-          builder: (maxCtr) => Center(
+          builder: (_maxCtr) => Center(
             child: ColoredBox(
               color: Colors.black,
               child: SizedBox(
                 height: MediaQuery.of(context).size.height,
                 width: MediaQuery.of(context).size.width,
                 child: Center(
-                  child: maxCtr.videoCtr == null
+                  child: _maxCtr.videoCtr == null
                       ? loadingWidget
-                      : maxCtr.videoCtr!.value.isInitialized
+                      : _maxCtr.videoCtr!.value.isInitialized
                           ? _MaxCoreVideoPlayer(
                               tag: widget.tag,
-                              videoPlayerCtr: maxCtr.videoCtr!,
+                              videoPlayerCtr: _maxCtr.videoCtr!,
                               videoAspectRatio:
-                                  maxCtr.videoCtr?.value.aspectRatio ?? 16 / 9,
+                                  _maxCtr.videoCtr?.value.aspectRatio ?? 16 / 9,
                             )
                           : loadingWidget,
                 ),

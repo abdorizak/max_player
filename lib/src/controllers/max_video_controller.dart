@@ -1,5 +1,3 @@
-// ignore_for_file: no_leading_underscores_for_local_identifiers, use_build_context_synchronously
-
 part of 'max_getx_video_controller.dart';
 
 class _MaxVideoController extends _MaxUiController {
@@ -96,7 +94,7 @@ class _MaxVideoController extends _MaxUiController {
   ///toogle play pause
   void togglePlayPauseVideo() {
     isvideoPlaying = !isvideoPlaying;
-    MaxVideoStateChanger(
+    maxVideoStateChanger(
       isvideoPlaying ? MaxVideoState.playing : MaxVideoState.paused,
     );
   }

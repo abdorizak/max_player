@@ -1,5 +1,3 @@
-// ignore_for_file: no_leading_underscores_for_local_identifiers
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -148,13 +146,13 @@ class _DoubleTapIconState extends State<DoubleTapIcon>
                 GetBuilder<MaxGetXVideoController>(
                   tag: widget.tag,
                   id: 'double-tap',
-                  builder: (maxCtr) {
-                    if (widget.isForward && maxCtr.isRightDbTapIconVisible) {
+                  builder: (_maxCtr) {
+                    if (widget.isForward && _maxCtr.isRightDbTapIconVisible) {
                       return AnimatedOpacity(
                         duration: const Duration(milliseconds: 300),
                         opacity: opacityCtr.value,
                         child: Text(
-                          '${maxCtr.isLeftDbTapIconVisible ? maxCtr.leftDoubleTapduration : maxCtr.rightDubleTapduration} Sec',
+                          '${_maxCtr.isLeftDbTapIconVisible ? _maxCtr.leftDoubleTapduration : _maxCtr.rightDubleTapduration} Sec',
                           style: const TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
@@ -162,12 +160,12 @@ class _DoubleTapIconState extends State<DoubleTapIcon>
                         ),
                       );
                     }
-                    if (!widget.isForward && maxCtr.isLeftDbTapIconVisible) {
+                    if (!widget.isForward && _maxCtr.isLeftDbTapIconVisible) {
                       return AnimatedOpacity(
                         duration: const Duration(milliseconds: 300),
                         opacity: opacityCtr.value,
                         child: Text(
-                          '${maxCtr.isLeftDbTapIconVisible ? maxCtr.leftDoubleTapduration : maxCtr.rightDubleTapduration} Sec',
+                          '${_maxCtr.isLeftDbTapIconVisible ? _maxCtr.leftDoubleTapduration : _maxCtr.rightDubleTapduration} Sec',
                           style: const TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,

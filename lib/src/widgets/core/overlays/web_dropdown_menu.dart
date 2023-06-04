@@ -1,5 +1,3 @@
-// ignore_for_file: use_build_context_synchronously
-
 part of 'package:max_player/src/max_player.dart';
 
 class _WebSettingsDropdown extends StatefulWidget {
@@ -23,43 +21,43 @@ class _WebSettingsDropdownState extends State<_WebSettingsDropdown> {
       ),
       child: GetBuilder<MaxGetXVideoController>(
         tag: widget.tag,
-        builder: (maxCtr) {
+        builder: (_maxCtr) {
           return MaterialIconButton(
-            toolTipMesg: maxCtr.maxPlayerLabels.settings,
+            toolTipMesg: _maxCtr.maxPlayerLabels.settings,
             color: Colors.white,
             child: const Icon(Icons.settings),
-            onPressed: () => maxCtr.isFullScreen
-                ? maxCtr.isWebPopupOverlayOpen = true
-                : maxCtr.isWebPopupOverlayOpen = false,
+            onPressed: () => _maxCtr.isFullScreen
+                ? _maxCtr.isWebPopupOverlayOpen = true
+                : _maxCtr.isWebPopupOverlayOpen = false,
             onTapDown: (details) async {
-              final settingsMenu = await showMenu<String>(
+              final _settingsMenu = await showMenu<String>(
                 context: context,
                 items: [
-                  if (maxCtr.vimeoOrVideoUrls.isNotEmpty)
+                  if (_maxCtr.vimeoOrVideoUrls.isNotEmpty)
                     PopupMenuItem(
                       value: 'OUALITY',
                       child: _bottomSheetTiles(
-                        title: maxCtr.maxPlayerLabels.quality,
+                        title: _maxCtr.maxPlayerLabels.quality,
                         icon: Icons.video_settings_rounded,
-                        subText: '${maxCtr.vimeoPlayingVideoQuality}p',
+                        subText: '${_maxCtr.vimeoPlayingVideoQuality}p',
                       ),
                     ),
                   PopupMenuItem(
                     value: 'LOOP',
                     child: _bottomSheetTiles(
-                      title: maxCtr.maxPlayerLabels.loopVideo,
+                      title: _maxCtr.maxPlayerLabels.loopVideo,
                       icon: Icons.loop_rounded,
-                      subText: maxCtr.isLooping
-                          ? maxCtr.maxPlayerLabels.optionEnabled
-                          : maxCtr.maxPlayerLabels.optionDisabled,
+                      subText: _maxCtr.isLooping
+                          ? _maxCtr.maxPlayerLabels.optionEnabled
+                          : _maxCtr.maxPlayerLabels.optionDisabled,
                     ),
                   ),
                   PopupMenuItem(
                     value: 'SPEED',
                     child: _bottomSheetTiles(
-                      title: maxCtr.maxPlayerLabels.playbackSpeed,
+                      title: _maxCtr.maxPlayerLabels.playbackSpeed,
                       icon: Icons.slow_motion_video_rounded,
-                      subText: maxCtr.currentPaybackSpeed,
+                      subText: _maxCtr.currentPaybackSpeed,
                     ),
                   ),
                 ],
@@ -68,19 +66,19 @@ class _WebSettingsDropdownState extends State<_WebSettingsDropdown> {
                   MediaQuery.of(context).size,
                 ),
               );
-              switch (settingsMenu) {
+              switch (_settingsMenu) {
                 case 'OUALITY':
-                  await _onVimeoQualitySelect(details, maxCtr);
+                  await _onVimeoQualitySelect(details, _maxCtr);
                   break;
                 case 'SPEED':
-                  await _onPlaybackSpeedSelect(details, maxCtr);
+                  await _onPlaybackSpeedSelect(details, _maxCtr);
                   break;
                 case 'LOOP':
-                  maxCtr.isWebPopupOverlayOpen = false;
-                  await maxCtr.toggleLooping();
+                  _maxCtr.isWebPopupOverlayOpen = false;
+                  await _maxCtr.toggleLooping();
                   break;
                 default:
-                  maxCtr.isWebPopupOverlayOpen = false;
+                  _maxCtr.isWebPopupOverlayOpen = false;
               }
             },
           );
@@ -91,50 +89,51 @@ class _WebSettingsDropdownState extends State<_WebSettingsDropdown> {
 
   Future<void> _onPlaybackSpeedSelect(
     TapDownDetails details,
-    MaxGetXVideoController maxCtr,
+    MaxGetXVideoController _maxCtr,
   ) async {
     await Future.delayed(
       const Duration(milliseconds: 400),
     );
     await showMenu(
       context: context,
-      items: maxCtr.videoPlaybackSpeeds
+      items: _maxCtr.videoPlaybackSpeeds
           .map(
             (e) => PopupMenuItem(
               child: ListTile(
                 title: Text(e),
               ),
               onTap: () {
-                maxCtr.setVideoPlayBack(e);
+                _maxCtr.setVideoPlayBack(e);
               },
             ),
           )
           .toList(),
       position: RelativeRect.fromSize(
         details.globalPosition & Size.zero,
+        // ignore: use_build_context_synchronously
         MediaQuery.of(context).size,
       ),
     );
-    maxCtr.isWebPopupOverlayOpen = false;
+    _maxCtr.isWebPopupOverlayOpen = false;
   }
 
   Future<void> _onVimeoQualitySelect(
     TapDownDetails details,
-    MaxGetXVideoController maxCtr,
+    MaxGetXVideoController _maxCtr,
   ) async {
     await Future.delayed(
       const Duration(milliseconds: 400),
     );
     await showMenu(
       context: context,
-      items: maxCtr.vimeoOrVideoUrls
+      items: _maxCtr.vimeoOrVideoUrls
           .map(
             (e) => PopupMenuItem(
               child: ListTile(
                 title: Text('${e.quality}p'),
               ),
               onTap: () {
-                maxCtr.changeVideoQuality(
+                _maxCtr.changeVideoQuality(
                   e.quality,
                 );
               },
@@ -143,10 +142,11 @@ class _WebSettingsDropdownState extends State<_WebSettingsDropdown> {
           .toList(),
       position: RelativeRect.fromSize(
         details.globalPosition & Size.zero,
+        // ignore: use_build_context_synchronously
         MediaQuery.of(context).size,
       ),
     );
-    maxCtr.isWebPopupOverlayOpen = false;
+    _maxCtr.isWebPopupOverlayOpen = false;
   }
 
   Widget _bottomSheetTiles({

@@ -1,4 +1,4 @@
-// ignore_for_file: no_leading_underscores_for_library_prefixes
+// ignore_for_file: no_leading_underscores_for_library_prefixes, no_leading_underscores_for_local_identifiers
 
 import 'dart:async';
 
@@ -8,21 +8,28 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:universal_html/html.dart' as _html;
 
-import 'package:max_player/src/widgets/material_icon_button.dart';
-
 import '../max_player.dart';
 import 'controllers/max_getx_video_controller.dart';
 import 'utils/logger.dart';
 import 'widgets/double_tap_icon.dart';
+import 'widgets/material_icon_button.dart';
 
 part 'widgets/animated_play_pause_icon.dart';
-part 'widgets/core/max_core_player.dart';
+
 part 'widgets/core/overlays/mobile_bottomsheet.dart';
+
 part 'widgets/core/overlays/mobile_overlay.dart';
+
 part 'widgets/core/overlays/overlays.dart';
+
 part 'widgets/core/overlays/web_dropdown_menu.dart';
+
 part 'widgets/core/overlays/web_overlay.dart';
+
+part 'widgets/core/max_core_player.dart';
+
 part 'widgets/core/video_gesture_detector.dart';
+
 part 'widgets/full_screen_view.dart';
 
 class MaxVideoPlayer extends StatefulWidget {
@@ -94,25 +101,25 @@ class MaxVideoPlayer extends StatefulWidget {
 
 class _MaxVideoPlayerState extends State<MaxVideoPlayer>
     with TickerProviderStateMixin {
-  late MaxGetXVideoController maxCtr;
+  late MaxGetXVideoController _maxCtr;
 
   // late String tag;
   @override
   void initState() {
     super.initState();
     // tag = widget.controller?.tag ?? UniqueKey().toString();
-    maxCtr = Get.put(
+    _maxCtr = Get.put(
       MaxGetXVideoController(),
       permanent: true,
       tag: widget.controller.getTag,
     )..isVideoUiBinded = true;
-    if (maxCtr.wasVideoPlayingOnUiDispose ?? false) {
-      maxCtr.MaxVideoStateChanger(MaxVideoState.playing, updateUi: false);
+    if (_maxCtr.wasVideoPlayingOnUiDispose ?? false) {
+      _maxCtr.maxVideoStateChanger(MaxVideoState.playing, updateUi: false);
     }
     if (kIsWeb) {
       if (widget.controller.maxPlayerConfig.forcedVideoFocus) {
-        maxCtr.keyboardFocusWeb = FocusNode();
-        maxCtr.keyboardFocusWeb?.addListener(maxCtr.keyboadListner);
+        _maxCtr.keyboardFocusWeb = FocusNode();
+        _maxCtr.keyboardFocusWeb?.addListener(_maxCtr.keyboadListner);
       }
       //to disable mouse right click
       _html.document.onContextMenu.listen((event) => event.preventDefault());
@@ -124,24 +131,24 @@ class _MaxVideoPlayerState extends State<MaxVideoPlayer>
     super.dispose();
 
     ///Checking if the video was playing when this widget is disposed
-    if (maxCtr.isvideoPlaying) {
-      maxCtr.wasVideoPlayingOnUiDispose = true;
+    if (_maxCtr.isvideoPlaying) {
+      _maxCtr.wasVideoPlayingOnUiDispose = true;
     } else {
-      maxCtr.wasVideoPlayingOnUiDispose = false;
+      _maxCtr.wasVideoPlayingOnUiDispose = false;
     }
-    maxCtr
+    _maxCtr
       ..isVideoUiBinded = false
-      ..MaxVideoStateChanger(MaxVideoState.paused, updateUi: false);
+      ..maxVideoStateChanger(MaxVideoState.paused, updateUi: false);
     if (kIsWeb) {
-      maxCtr.keyboardFocusWeb?.removeListener(maxCtr.keyboadListner);
+      _maxCtr.keyboardFocusWeb?.removeListener(_maxCtr.keyboadListner);
     }
-    // maxCtr.keyboardFocus?.unfocus();
-    // maxCtr.keyboardFocusOnFullScreen?.unfocus();
-    maxCtr.hoverOverlayTimer?.cancel();
-    maxCtr.showOverlayTimer?.cancel();
-    maxCtr.showOverlayTimer1?.cancel();
-    maxCtr.leftDoubleTapTimer?.cancel();
-    maxCtr.rightDoubleTapTimer?.cancel();
+    // _maxCtr.keyboardFocus?.unfocus();
+    // _maxCtr.keyboardFocusOnFullScreen?.unfocus();
+    _maxCtr.hoverOverlayTimer?.cancel();
+    _maxCtr.showOverlayTimer?.cancel();
+    _maxCtr.showOverlayTimer1?.cancel();
+    _maxCtr.leftDoubleTapTimer?.cancel();
+    _maxCtr.rightDoubleTapTimer?.cancel();
     maxLog('local MaxVideoPlayer disposed');
   }
 
@@ -151,9 +158,9 @@ class _MaxVideoPlayerState extends State<MaxVideoPlayer>
   @override
   Widget build(BuildContext context) {
     final circularProgressIndicator = _thumbnailAndLoadingWidget();
-    maxCtr.mainContext = context;
+    _maxCtr.mainContext = context;
 
-    final videoErrorWidget = AspectRatio(
+    final _videoErrorWidget = AspectRatio(
       aspectRatio: _frameAspectRatio,
       child: Center(
         child: Column(
@@ -177,7 +184,7 @@ class _MaxVideoPlayerState extends State<MaxVideoPlayer>
       tag: widget.controller.getTag,
       builder: (_) {
         _frameAspectRatio = widget.matchFrameAspectRatioToVideo
-            ? maxCtr.videoCtr?.value.aspectRatio ?? widget.frameAspectRatio
+            ? _maxCtr.videoCtr?.value.aspectRatio ?? widget.frameAspectRatio
             : widget.frameAspectRatio;
         return Center(
           child: ColoredBox(
@@ -185,15 +192,15 @@ class _MaxVideoPlayerState extends State<MaxVideoPlayer>
             child: GetBuilder<MaxGetXVideoController>(
               tag: widget.controller.getTag,
               id: 'errorState',
-              builder: (maxCtr) {
+              builder: (_maxCtr) {
                 /// Check if has any error
-                if (maxCtr.maxVideoState == MaxVideoState.error) {
-                  return widget.onVideoError?.call() ?? videoErrorWidget;
+                if (_maxCtr.maxVideoState == MaxVideoState.error) {
+                  return widget.onVideoError?.call() ?? _videoErrorWidget;
                 }
 
                 return AspectRatio(
                   aspectRatio: _frameAspectRatio,
-                  child: maxCtr.videoCtr?.value.isInitialized ?? false
+                  child: _maxCtr.videoCtr?.value.isInitialized ?? false
                       ? _buildPlayer()
                       : Center(child: circularProgressIndicator),
                 );
@@ -238,26 +245,26 @@ class _MaxVideoPlayerState extends State<MaxVideoPlayer>
   }
 
   Widget _buildPlayer() {
-    final videoAspectRatio = widget.matchVideoAspectRatioToFrame
-        ? maxCtr.videoCtr?.value.aspectRatio ?? widget.videoAspectRatio
+    final _videoAspectRatio = widget.matchVideoAspectRatioToFrame
+        ? _maxCtr.videoCtr?.value.aspectRatio ?? widget.videoAspectRatio
         : widget.videoAspectRatio;
     if (kIsWeb) {
       return GetBuilder<MaxGetXVideoController>(
         tag: widget.controller.getTag,
         id: 'full-screen',
-        builder: (maxCtr) {
-          if (maxCtr.isFullScreen) return _thumbnailAndLoadingWidget();
+        builder: (_maxCtr) {
+          if (_maxCtr.isFullScreen) return _thumbnailAndLoadingWidget();
           return _MaxCoreVideoPlayer(
-            videoPlayerCtr: maxCtr.videoCtr!,
-            videoAspectRatio: videoAspectRatio,
+            videoPlayerCtr: _maxCtr.videoCtr!,
+            videoAspectRatio: _videoAspectRatio,
             tag: widget.controller.getTag,
           );
         },
       );
     } else {
       return _MaxCoreVideoPlayer(
-        videoPlayerCtr: maxCtr.videoCtr!,
-        videoAspectRatio: videoAspectRatio,
+        videoPlayerCtr: _maxCtr.videoCtr!,
+        videoAspectRatio: _videoAspectRatio,
         tag: widget.controller.getTag,
       );
     }

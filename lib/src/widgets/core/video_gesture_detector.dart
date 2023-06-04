@@ -1,5 +1,3 @@
-// ignore_for_file: no_leading_underscores_for_local_identifiers
-
 part of 'package:max_player/src/max_player.dart';
 
 class _VideoGestureDetector extends StatelessWidget {
@@ -18,12 +16,12 @@ class _VideoGestureDetector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final maxCtr = Get.find<MaxGetXVideoController>(tag: tag);
+    final _maxCtr = Get.find<MaxGetXVideoController>(tag: tag);
     return MouseRegion(
-      onHover: (event) => maxCtr.onOverlayHover(),
-      onExit: (event) => maxCtr.onOverlayHoverExit(),
+      onHover: (event) => _maxCtr.onOverlayHover(),
+      onExit: (event) => _maxCtr.onOverlayHoverExit(),
       child: GestureDetector(
-        onTap: onTap ?? maxCtr.toggleVideoOverlay,
+        onTap: onTap ?? _maxCtr.toggleVideoOverlay,
         onDoubleTap: onDoubleTap,
         child: child,
       ),

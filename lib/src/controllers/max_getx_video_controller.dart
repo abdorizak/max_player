@@ -1,5 +1,3 @@
-// ignore_for_file: no_leading_underscores_for_library_prefixes, no_leading_underscores_for_local_identifiers
-
 import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
@@ -7,10 +5,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:max_player/max_player.dart';
-import 'package:universal_html/html.dart' as _html;
+import 'package:universal_html/html.dart' as html;
 import 'package:wakelock/wakelock.dart';
 
+import '../../max_player.dart';
 import '../utils/logger.dart';
 import '../utils/video_apis.dart';
 
@@ -24,8 +22,8 @@ class MaxGetXVideoController extends _MaxGesturesController {
   ///main videoplayer controller
   VideoPlayerController? get videoCtr => _videoCtr;
 
-  ///MaxVideoPlayer state notifier
-  MaxVideoState get maxVideoState => _MaxVideoState;
+  ///maxVideoPlayer state notifier
+  MaxVideoState get maxVideoState => _maxVideoState;
 
   ///vimeo or general --video player type
   MaxVideoPlayerType get videoPlayerType => _videoPlayerType;
@@ -63,7 +61,7 @@ class MaxGetXVideoController extends _MaxGesturesController {
       _videoDuration = _videoCtr?.value.duration ?? Duration.zero;
       await setLooping(isLooping);
       _videoCtr?.addListener(videoListner);
-      addListenerId('MaxVideoState', maxStateListner);
+      addListenerId('maxVideoState', maxStateListner);
 
       checkAutoPlayVideo();
       controllerInitialized = true;
@@ -74,10 +72,10 @@ class MaxGetXVideoController extends _MaxGesturesController {
       Future.delayed(const Duration(milliseconds: 600))
           .then((value) => _isWebAutoPlayDone = true);
     } catch (e) {
-      MaxVideoStateChanger(MaxVideoState.error);
+      maxVideoStateChanger(MaxVideoState.error);
       update(['errorState']);
       update(['update-all']);
-      maxLog('ERROR ON max_player:  $e');
+      maxLog('ERROR ON max_PLAYER:  $e');
       rethrow;
     }
   }
@@ -231,7 +229,7 @@ class MaxGetXVideoController extends _MaxGesturesController {
       }
       if (event.isKeyPressed(LogicalKeyboardKey.escape)) {
         if (isFullScreen) {
-          _html.document.exitFullscreen();
+          html.document.exitFullscreen();
           if (!isWebPopupOverlayOpen) {
             disableFullScreen(appContext, tag);
           }
@@ -244,20 +242,20 @@ class MaxGetXVideoController extends _MaxGesturesController {
 
   void toggleFullScreenOnWeb(BuildContext context, String tag) {
     if (isFullScreen) {
-      _html.document.exitFullscreen();
+      html.document.exitFullscreen();
       if (!isWebPopupOverlayOpen) {
         disableFullScreen(context, tag);
       }
     } else {
-      _html.document.documentElement?.requestFullscreen();
+      html.document.documentElement?.requestFullscreen();
       enableFullScreen(tag);
     }
   }
 
-  ///this func will listne to update id `_MaxVideoState`
+  ///this func will listne to update id `_maxVideoState`
   void maxStateListner() {
-    maxLog(_MaxVideoState.toString());
-    switch (_MaxVideoState) {
+    maxLog(_maxVideoState.toString());
+    switch (_maxVideoState) {
       case MaxVideoState.playing:
         if (maxPlayerConfig.wakelockEnabled) Wakelock.enable();
         playVideo(true);
@@ -281,9 +279,9 @@ class MaxGetXVideoController extends _MaxGesturesController {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       if (autoPlay && (isVideoUiBinded ?? false)) {
         if (kIsWeb) await _videoCtr?.setVolume(0);
-        MaxVideoStateChanger(MaxVideoState.playing);
+        maxVideoStateChanger(MaxVideoState.playing);
       } else {
-        MaxVideoStateChanger(MaxVideoState.paused);
+        maxVideoStateChanger(MaxVideoState.paused);
       }
     });
   }
@@ -293,10 +291,10 @@ class MaxGetXVideoController extends _MaxGesturesController {
     required MaxPlayerConfig playerConfig,
   }) async {
     _videoCtr?.removeListener(videoListner);
-    MaxVideoStateChanger(MaxVideoState.paused);
-    MaxVideoStateChanger(MaxVideoState.loading);
+    maxVideoStateChanger(MaxVideoState.paused);
+    maxVideoStateChanger(MaxVideoState.loading);
     keyboardFocusWeb?.removeListener(keyboadListner);
-    removeListenerId('MaxVideoState', maxStateListner);
+    removeListenerId('maxVideoState', maxStateListner);
     _isWebAutoPlayDone = false;
     vimeoOrVideoUrls = [];
     config(playVideoFrom: playVideoFrom, playerConfig: playerConfig);

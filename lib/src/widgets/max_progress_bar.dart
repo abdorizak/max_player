@@ -1,11 +1,10 @@
-// ignore_for_file: no_leading_underscores_for_local_identifiers
-
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get/instance_manager.dart';
-import 'package:max_player/max_player.dart';
+import 'package:video_player/video_player.dart';
 
 import '../controllers/max_getx_video_controller.dart';
+import '../models/max_progress_bar_config.dart';
 
 /// Renders progress bar for the video using custom paint.
 class MaxProgressBar extends StatefulWidget {
@@ -33,8 +32,8 @@ class MaxProgressBar extends StatefulWidget {
 }
 
 class _MaxProgressBarState extends State<MaxProgressBar> {
-  late final maxCtr = Get.find<MaxGetXVideoController>(tag: widget.tag);
-  late VideoPlayerValue? videoPlayerValue = maxCtr.videoCtr?.value;
+  late final _maxCtr = Get.find<MaxGetXVideoController>(tag: widget.tag);
+  late VideoPlayerValue? videoPlayerValue = _maxCtr.videoCtr?.value;
   bool _controllerWasPlaying = false;
 
   void seekToRelativePosition(Offset globalPosition) {
@@ -44,7 +43,7 @@ class _MaxProgressBarState extends State<MaxProgressBar> {
       final double relative = tapPos.dx / box.size.width;
       final Duration position =
           (videoPlayerValue?.duration ?? Duration.zero) * relative;
-      maxCtr.seekTo(position);
+      _maxCtr.seekTo(position);
     }
   }
 
@@ -55,8 +54,8 @@ class _MaxProgressBarState extends State<MaxProgressBar> {
     return GetBuilder<MaxGetXVideoController>(
       tag: widget.tag,
       id: 'video-progress',
-      builder: (maxCtr) {
-        videoPlayerValue = maxCtr.videoCtr?.value;
+      builder: (_maxCtr) {
+        videoPlayerValue = _maxCtr.videoCtr?.value;
         return LayoutBuilder(
           builder: (context, size) {
             return GestureDetector(
@@ -67,9 +66,9 @@ class _MaxProgressBarState extends State<MaxProgressBar> {
                   return;
                 }
                 _controllerWasPlaying =
-                    maxCtr.videoCtr?.value.isPlaying ?? false;
+                    _maxCtr.videoCtr?.value.isPlaying ?? false;
                 if (_controllerWasPlaying) {
-                  maxCtr.videoCtr?.pause();
+                  _maxCtr.videoCtr?.pause();
                 }
 
                 if (widget.onDragStart != null) {
@@ -80,16 +79,16 @@ class _MaxProgressBarState extends State<MaxProgressBar> {
                 if (!videoPlayerValue!.isInitialized) {
                   return;
                 }
-                maxCtr.isShowOverlay(true);
+                _maxCtr.isShowOverlay(true);
                 seekToRelativePosition(details.globalPosition);
 
                 widget.onDragUpdate?.call();
               },
               onHorizontalDragEnd: (DragEndDetails details) {
                 if (_controllerWasPlaying) {
-                  maxCtr.videoCtr?.play();
+                  _maxCtr.videoCtr?.play();
                 }
-                maxCtr.toggleVideoOverlay();
+                _maxCtr.toggleVideoOverlay();
 
                 if (widget.onDragEnd != null) {
                   widget.onDragEnd?.call();
@@ -121,11 +120,11 @@ class _MaxProgressBarState extends State<MaxProgressBar> {
             child: GetBuilder<MaxGetXVideoController>(
               tag: widget.tag,
               id: 'overlay',
-              builder: (maxCtr) => CustomPaint(
+              builder: (_maxCtr) => CustomPaint(
                 painter: _ProgressBarPainter(
                   videoPlayerValue!,
                   maxProgressBarConfig: widget.maxProgressBarConfig.copyWith(
-                    circleHandlerRadius: maxCtr.isOverlayVisible ||
+                    circleHandlerRadius: _maxCtr.isOverlayVisible ||
                             widget
                                 .maxProgressBarConfig.alwaysVisibleCircleHandler
                         ? widget.maxProgressBarConfig.circleHandlerRadius

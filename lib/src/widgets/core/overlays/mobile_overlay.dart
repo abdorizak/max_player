@@ -1,5 +1,3 @@
-// ignore_for_file: no_leading_underscores_for_local_identifiers
-
 part of 'package:max_player/src/max_player.dart';
 
 class _MobileOverlay extends StatelessWidget {
@@ -14,7 +12,7 @@ class _MobileOverlay extends StatelessWidget {
   Widget build(BuildContext context) {
     const overlayColor = Colors.black38;
     const itemColor = Colors.white;
-    final maxCtr = Get.find<MaxGetXVideoController>(tag: tag);
+    final _maxCtr = Get.find<MaxGetXVideoController>(tag: tag);
     return Stack(
       alignment: Alignment.center,
       children: [
@@ -30,8 +28,8 @@ class _MobileOverlay extends StatelessWidget {
                     isForward: false,
                     height: double.maxFinite,
                     onDoubleTap: _isRtl()
-                        ? maxCtr.onRightDoubleTap
-                        : maxCtr.onLeftDoubleTap,
+                        ? _maxCtr.onRightDoubleTap
+                        : _maxCtr.onLeftDoubleTap,
                   ),
                 ),
                 SizedBox(
@@ -46,8 +44,8 @@ class _MobileOverlay extends StatelessWidget {
                     tag: tag,
                     height: double.maxFinite,
                     onDoubleTap: _isRtl()
-                        ? maxCtr.onLeftDoubleTap
-                        : maxCtr.onRightDoubleTap,
+                        ? _maxCtr.onLeftDoubleTap
+                        : _maxCtr.onRightDoubleTap,
                   ),
                 ),
               ],
@@ -61,17 +59,17 @@ class _MobileOverlay extends StatelessWidget {
             children: [
               Expanded(
                 child: IgnorePointer(
-                  child: maxCtr.videoTitle ?? const SizedBox(),
+                  child: _maxCtr.videoTitle ?? const SizedBox(),
                 ),
               ),
               MaterialIconButton(
-                toolTipMesg: maxCtr.maxPlayerLabels.settings,
+                toolTipMesg: _maxCtr.maxPlayerLabels.settings,
                 color: itemColor,
                 onPressed: () {
-                  if (maxCtr.isOverlayVisible) {
+                  if (_maxCtr.isOverlayVisible) {
                     _bottomSheet(context);
                   } else {
-                    maxCtr.toggleVideoOverlay();
+                    _maxCtr.toggleVideoOverlay();
                   }
                 },
                 child: const Icon(

@@ -1,5 +1,3 @@
-// ignore_for_file: no_leading_underscores_for_local_identifiers
-
 part of 'package:max_player/src/max_player.dart';
 
 class _WebOverlay extends StatelessWidget {
@@ -12,14 +10,14 @@ class _WebOverlay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const overlayColor = Colors.black38;
-    final maxCtr = Get.find<MaxGetXVideoController>(tag: tag);
+    final _maxCtr = Get.find<MaxGetXVideoController>(tag: tag);
     return Stack(
       children: [
         Positioned.fill(
           child: _VideoGestureDetector(
             tag: tag,
-            onTap: maxCtr.togglePlayPauseVideo,
-            onDoubleTap: () => maxCtr.toggleFullScreenOnWeb(context, tag),
+            onTap: _maxCtr.togglePlayPauseVideo,
+            onDoubleTap: () => _maxCtr.toggleFullScreenOnWeb(context, tag),
             child: const ColoredBox(
               color: overlayColor,
               child: SizedBox.expand(),
@@ -36,7 +34,7 @@ class _WebOverlay extends StatelessWidget {
           child: GetBuilder<MaxGetXVideoController>(
             tag: tag,
             id: 'double-tap',
-            builder: (maxCtr) {
+            builder: (_maxCtr) {
               return Row(
                 children: [
                   Expanded(
@@ -64,7 +62,7 @@ class _WebOverlay extends StatelessWidget {
             },
           ),
         ),
-        IgnorePointer(child: maxCtr.videoTitle ?? const SizedBox()),
+        IgnorePointer(child: _maxCtr.videoTitle ?? const SizedBox()),
       ],
     );
   }
@@ -80,13 +78,13 @@ class _WebOverlayBottomControlles extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final maxCtr = Get.find<MaxGetXVideoController>(tag: tag);
+    final _maxCtr = Get.find<MaxGetXVideoController>(tag: tag);
     const durationTextStyle = TextStyle(color: Colors.white70);
     const itemColor = Colors.white;
 
     return MouseRegion(
-      onHover: (event) => maxCtr.onOverlayHover(),
-      onExit: (event) => maxCtr.onOverlayHoverExit(),
+      onHover: (event) => _maxCtr.onOverlayHover(),
+      onExit: (event) => _maxCtr.onOverlayHoverExit(),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10),
         child: Column(
@@ -94,7 +92,7 @@ class _WebOverlayBottomControlles extends StatelessWidget {
           children: [
             MaxProgressBar(
               tag: tag,
-              maxProgressBarConfig: maxCtr.maxProgressBarConfig,
+              maxProgressBarConfig: _maxCtr.maxProgressBarConfig,
             ),
             Row(
               children: [
@@ -109,16 +107,16 @@ class _WebOverlayBottomControlles extends StatelessWidget {
                         GetBuilder<MaxGetXVideoController>(
                           tag: tag,
                           id: 'volume',
-                          builder: (maxCtr) => MaterialIconButton(
-                            toolTipMesg: maxCtr.isMute
-                                ? maxCtr.maxPlayerLabels.unmute ??
+                          builder: (_maxCtr) => MaterialIconButton(
+                            toolTipMesg: _maxCtr.isMute
+                                ? _maxCtr.maxPlayerLabels.unmute ??
                                     'Unmute${kIsWeb ? ' (m)' : ''}'
-                                : maxCtr.maxPlayerLabels.mute ??
+                                : _maxCtr.maxPlayerLabels.mute ??
                                     'Mute${kIsWeb ? ' (m)' : ''}',
                             color: itemColor,
-                            onPressed: maxCtr.toggleMute,
+                            onPressed: _maxCtr.toggleMute,
                             child: Icon(
-                              maxCtr.isMute
+                              _maxCtr.isMute
                                   ? Icons.volume_off_rounded
                                   : Icons.volume_up_rounded,
                             ),
@@ -127,12 +125,12 @@ class _WebOverlayBottomControlles extends StatelessWidget {
                         GetBuilder<MaxGetXVideoController>(
                           tag: tag,
                           id: 'video-progress',
-                          builder: (maxCtr) {
+                          builder: (_maxCtr) {
                             return Row(
                               children: [
                                 Text(
-                                  maxCtr.calculateVideoDuration(
-                                    maxCtr.videoPosition,
+                                  _maxCtr.calculateVideoDuration(
+                                    _maxCtr.videoPosition,
                                   ),
                                   style: durationTextStyle,
                                 ),
@@ -141,8 +139,8 @@ class _WebOverlayBottomControlles extends StatelessWidget {
                                   style: durationTextStyle,
                                 ),
                                 Text(
-                                  maxCtr.calculateVideoDuration(
-                                    maxCtr.videoDuration,
+                                  _maxCtr.calculateVideoDuration(
+                                    _maxCtr.videoDuration,
                                   ),
                                   style: durationTextStyle,
                                 ),
@@ -163,15 +161,16 @@ class _WebOverlayBottomControlles extends StatelessWidget {
                       children: [
                         _WebSettingsDropdown(tag: tag),
                         MaterialIconButton(
-                          toolTipMesg: maxCtr.isFullScreen
-                              ? maxCtr.maxPlayerLabels.exitFullScreen ??
+                          toolTipMesg: _maxCtr.isFullScreen
+                              ? _maxCtr.maxPlayerLabels.exitFullScreen ??
                                   'Exit full screen${kIsWeb ? ' (f)' : ''}'
-                              : maxCtr.maxPlayerLabels.fullscreen ??
+                              : _maxCtr.maxPlayerLabels.fullscreen ??
                                   'Fullscreen${kIsWeb ? ' (f)' : ''}',
                           color: itemColor,
-                          onPressed: () => _onFullScreenToggle(maxCtr, context),
+                          onPressed: () =>
+                              _onFullScreenToggle(_maxCtr, context),
                           child: Icon(
-                            maxCtr.isFullScreen
+                            _maxCtr.isFullScreen
                                 ? Icons.fullscreen_exit
                                 : Icons.fullscreen,
                           ),
@@ -189,29 +188,29 @@ class _WebOverlayBottomControlles extends StatelessWidget {
   }
 
   void _onFullScreenToggle(
-    MaxGetXVideoController maxCtr,
+    MaxGetXVideoController _maxCtr,
     BuildContext context,
   ) {
-    if (maxCtr.isOverlayVisible) {
-      if (maxCtr.isFullScreen) {
+    if (_maxCtr.isOverlayVisible) {
+      if (_maxCtr.isFullScreen) {
         if (kIsWeb) {
           _html.document.exitFullscreen();
-          maxCtr.disableFullScreen(context, tag);
+          _maxCtr.disableFullScreen(context, tag);
           return;
         } else {
-          maxCtr.disableFullScreen(context, tag);
+          _maxCtr.disableFullScreen(context, tag);
         }
       } else {
         if (kIsWeb) {
           _html.document.documentElement?.requestFullscreen();
-          maxCtr.enableFullScreen(tag);
+          _maxCtr.enableFullScreen(tag);
           return;
         } else {
-          maxCtr.enableFullScreen(tag);
+          _maxCtr.enableFullScreen(tag);
         }
       }
     } else {
-      maxCtr.toggleVideoOverlay();
+      _maxCtr.toggleVideoOverlay();
     }
   }
 }
