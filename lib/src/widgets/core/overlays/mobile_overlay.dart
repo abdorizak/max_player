@@ -105,12 +105,54 @@ class _MobileOverlay extends StatelessWidget {
           ),
         ),
 
-        // Center play/pause button
+        // Center cluster: skip-back-10s, play/pause, skip-forward-10s.
+        // Lives inside the overlay's AnimatedOpacity in overlays.dart, so
+        // these buttons fade in/out with the rest of the chrome whenever
+        // the user taps to toggle the overlay — no app-side wiring needed.
         Center(
-          child: _AnimatedPlayPauseIcon(
-            tag: tag,
-            size: 46,
-            controller: maxCtr,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              MaterialIconButton(
+                toolTipMesg: '-10s',
+                color: itemColor,
+                onPressed: maxCtr.isOverlayVisible
+                    ? () => unawaited(
+                          maxCtr.seekBackward(
+                            const Duration(seconds: 10),
+                          ),
+                        )
+                    : null,
+                child: Icon(
+                  Icons.replay_10,
+                  color: itemColor,
+                  size: 32,
+                ),
+              ),
+              const SizedBox(width: 12),
+              _AnimatedPlayPauseIcon(
+                tag: tag,
+                size: 46,
+                controller: maxCtr,
+              ),
+              const SizedBox(width: 12),
+              MaterialIconButton(
+                toolTipMesg: '+10s',
+                color: itemColor,
+                onPressed: maxCtr.isOverlayVisible
+                    ? () => unawaited(
+                          maxCtr.seekForward(
+                            const Duration(seconds: 10),
+                          ),
+                        )
+                    : null,
+                child: Icon(
+                  Icons.forward_10,
+                  color: itemColor,
+                  size: 32,
+                ),
+              ),
+            ],
           ),
         ),
 

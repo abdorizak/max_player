@@ -1,6 +1,6 @@
 name: max_player
 description: Max Player is a simple package to that helps you to play videos from your local, network and from the internet weather youtube, vimeo, etc.
-version: 3.0.1
+version: 3.1.0
 homepage: https://abdorizak.dev
 repository: https://github.com/abdorizak/max_player
 issue_tracker: https://github.com/abdorizak/max_player/issues

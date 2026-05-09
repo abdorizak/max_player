@@ -1,3 +1,10 @@
+## 3.1.0
+
+### New Features
+
+- **Skip-10s buttons in mobile overlay**: The center cluster now renders an explicit `replay_10` button on the left and a `forward_10` button on the right of the play/pause icon. Both call `seekBackward(10s)` / `seekForward(10s)` and live inside the overlay's `AnimatedOpacity`, so they fade in and out together with the rest of the chrome — no app-side wiring needed for visibility sync.
+- Previously, jumping by 10s required users to discover the left/right double-tap zones. The buttons make the same action discoverable for first-time users while leaving the double-tap zones intact.
+
 ## 3.0.1
 
 - **Fix**: YouTube videos now extract HLS streams in addition to muxed streams, enabling higher quality options (720p, 1080p+) when available. Previously only muxed streams were used which are typically limited to 360p.
